@@ -98,7 +98,7 @@ buscar todas as aulas usamos query
   }
 ```
 
-## Configurando e acessando as Urls 
+## Configurando e acessando as Urls
 
 https://app.graphcms.com/bde443fd156c44d1a8d096a67f26ea53/master/settings/api-access#root
 
@@ -107,6 +107,51 @@ https://api-sa-east-1.graphcms.com/v2/cl4o87jp717vc01z20w4v30a8/master
 
 > Configuramos as permissões de acesso
 
-Create permission > Read > Teacher > Stages only published 
+Create permission > Read > Teacher > Stages only published
 
-## Configurando 
+## Conectando o react com o graphql cms
+
+Usamos a ferramenta chamada Apolo
+instalando
+
+npm i @apollo/client graphql
+
+Criamos uma pasta dentro de src/lib
+
+dentro de lib/apollo.ts
+
+```tsx
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+
+export const client = new ApolloClient({
+  uri: "https://api-sa-east-1.graphcms.com/v2/cl4o87jp717vc01z20w4v30a8/master",
+  cache: new InMemoryCache(), // por padrao ele vai usr o cache se ja existir
+});
+```
+
+> Com apollo instalado e configurado vamos fazer a requisição
+
+Podemos usar o useEffect()
+
+```tsx
+// criamos uma variável const
+const GET_LESSONS_QUERY = gql`
+  query {
+    lessons {
+      id
+      title
+    }
+  }
+`;
+
+// usamos o useEffect usando o client criado no apollo.ts
+useEffect(() => {
+  client
+    .query({
+      query: GET_LESSONS_QUERY,
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
+}, []);
+```
