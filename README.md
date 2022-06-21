@@ -132,6 +132,7 @@ export const client = new ApolloClient({
 > Com apollo instalado e configurado vamos fazer a requisição
 
 Podemos usar o useEffect()
+seria uma forma de usar ,porem nao vamos usar desta forma o exemplo seria como abaixo
 
 ```tsx
 // criamos uma variável const
@@ -154,4 +155,66 @@ useEffect(() => {
       console.log(res.data);
     });
 }, []);
+```
+
+## forma que vamos usar a requisição
+
+vamos usar o useQuery;
+
+```tsx
+const { data } = useQuery(GET_LESSONS_QUERY);
+```
+
+se usarmos assim vai dar erro , temos que englobar com ApolloProvider nosso root
+no main.tsx
+
+```tsx
+// import { ApolloProvider } from "@apollo/client";
+// import React from "react";
+// import ReactDOM from "react-dom/client";
+// import App from "./App";
+import { client } from "./lib/apollo";
+
+// import "./styles/global.css";
+// ReactDOM.createRoot(document.getElementById("root")!).render(
+//   <React.StrictMode>
+<ApolloProvider client={client}>
+  // passando o client // <App />
+</ApolloProvider>;
+//   </React.StrictMode>
+// );
+```
+
+Agora no App.tsx usamos configuramos o JSX
+
+```tsx
+import { gql, useQuery } from "@apollo/client";
+
+const GET_LESSONS_QUERY = gql`
+  query {
+    lessons {
+      id
+      title
+    }
+  }
+`;
+
+interface Lesson {
+  id: string;
+  title: string;
+}
+
+function App() {
+  const { data } = useQuery<{ lessons: Lesson[] }>(GET_LESSONS_QUERY);
+
+  return (
+    <ul>
+      {data?.lessons.map((lesson) => (
+        <li key={lesson.id}>{lesson.title}</li>
+      ))}
+    </ul>
+  );
+}
+
+export default App;
 ```
