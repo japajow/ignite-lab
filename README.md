@@ -61,6 +61,41 @@ Post Css
 
 import "./styles/global.css";
 
-> Agora no App.tsx conseguimos usar as classes do tailwindcss 
+> Agora no App.tsx conseguimos usar as classes do tailwindcss
 
+> Estilizando o nosso body global
 
+**styles/global.css**
+
+```css
+body {
+  @apply bg-zinc-900 text-zinc-100;
+}
+```
+
+## Configurando o GraphCMS
+
+// CMS - Content Management System
+
+// Headless CMS : Painel de Admin (apenas o ADM) os dados sao fornecidos através de um API REST ou8 GRAPHQL
+
+// React que consome essa API do CMS
+
+// No GraphQl temos duas condições query e mutation
+
+//Query - buscar dados
+//Mutation - criar , alterar ou deletar dados
+
+buscar todas as aulas usamos query
+
+```tsx
+  query MyQuery{
+    lessons {
+      id
+      slug
+      title
+    }
+  }
+```
+
+## Conectando o projeto front-end com o GraphQL CMS
