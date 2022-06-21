@@ -98,4 +98,15 @@ buscar todas as aulas usamos query
   }
 ```
 
-## Conectando o projeto front-end com o GraphQL CMS
+## Configurando e acessando as Urls 
+
+https://app.graphcms.com/bde443fd156c44d1a8d096a67f26ea53/master/settings/api-access#root
+
+Copiamos a URL Content API
+https://api-sa-east-1.graphcms.com/v2/cl4o87jp717vc01z20w4v30a8/master
+
+> Configuramos as permissões de acesso
+
+Create permission > Read > Teacher > Stages only published 
+
+## Configurando 
