@@ -631,3 +631,202 @@ export function Lesson() {
   );
 }
 ```
+
+## Criando as Props no Lesson.tsx
+
+Lesson.tsx
+
+criando os dados com a interface LessonProps
+
+```tsx
+interface LessonProps {
+  title: string;
+  slug: string;
+  availableAt: Date;
+  type: "live" | "class";
+}
+```
+
+Incluindo as props no JSX do Lesson
+
+```tsx
+import { CheckCircle, Lock } from "phosphor-react";
+
+interface LessonProps {
+  title: string;
+  slug: string;
+  availableAt: Date;
+  type: "live" | "class";
+}
+
+export function Lesson(props: LessonProps) {
+  const isLessonAvailable = false;
+  return (
+    <a href="#">
+      <span className="text-gray-300">{props.availableAt.toString()}</span>
+
+      <div className="rounded border border-gray-500 p-4 mt-2 ">
+        <header className="flex items-center justify-between">
+          {isLessonAvailable ? (
+            <span className="text-sm text-blue-500 font-medium flex items-center gap-2">
+              <CheckCircle size={20} />
+              Conteúdo liberado
+            </span>
+          ) : (
+            <span className="text-sm text-orange-500 font-medium flex items-center gap-2">
+              <Lock size={20} />
+              Em Breve
+            </span>
+          )}
+          <span className="text-xs rounded px-2 py-[0.125rem] text-white border border-green-300 font-bold">
+            {props.type === "live" ? "AO VIVO" : "AULA PRATICA"}
+          </span>
+        </header>
+
+        <strong className="text-gray-200 mt-5 block">{props.title}</strong>
+      </div>
+    </a>
+  );
+}
+```
+
+Agora no Sidebar.tsx os Lesson temos que incluir as propriedades(props)
+
+Sidebar.tsx
+
+```tsx
+<div className="flex flex-col gap-8">
+  <Lesson
+    title="Abertura do evento Ignite labs"
+    slug="aula-1"
+    availableAt={new Date()}
+    type="class"
+  />
+</div>
+```
+
+> Buscando as aulas no GraphCMS
+
+Site : https://app.graphcms.com/bde443fd156c44d1a8d096a67f26ea53/master/graphiql
+
+Criamos o gql
+
+```gql
+query {
+  lessons(orderBy: availableAt_ASC, stage: PUBLISHED) {
+    id
+    slug
+    title
+    lessonType
+    availableAt
+  }
+}
+
+Agora que criamos incluímos ele na nossa variável
+const GET_LESSON_QUERY = gql`
+  query {
+    lessons(orderBy: availableAt_ASC, stage: PUBLISHED) {
+      id
+      slug
+      title
+      lessonType
+      availableAt
+    }
+  }
+`;
+```
+
+> Com a gql criada chamamos o hook useQuery
+
+```tsx
+const { data } = useQuery(GET_LESSON_QUERY);
+```
+
+> Inserindo os dados que pegamos pela API graphCMS no JSX Sidebar.tsx
+
+Sidebar.tsx
+
+Primeiro criamos a interface
+como ela e um objeto de array criamos a interface desta forma abaixo
+
+```tsx
+interface GetLessonsQueryResponse {
+  lessons: {
+    id: string;
+    title: string;
+    slug: string;
+    availableAt: string;
+    type: "live" | "class";
+  }[];
+}
+```
+
+> Agora que criamos a interface inserimos ele genericamente
+
+```tsx
+const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSON_QUERY);
+```
+
+> Inserimos os dados na Lesson
+
+```tsx
+ <div className="flex flex-col gap-8">
+        {data?.lessons.map((lesson) => {
+          return (
+             <Lesson
+              key={lesson.id}
+              title={lesson.title}
+              slug={lesson.slug}
+              availableAt={new Date(lesson.availableAt)}
+              type={lesson.lessonType}
+            />
+          );
+        })}
+```
+
+> Precisamos converter a date string para uma data
+
+Para isso vamos incluir uma biblioteca chamada date-fns
+npm i date-fns
+
+importamos e usamos a funcao do date-fns
+import { isPast} from 'date-fns'
+
+usamos ele no isLessonAvailable = isPast()
+
+Lesson.tsx
+
+```tsx
+import { isPast } from "date-fns";
+const isLessonAvailable = isPast(props.availableAt);
+```
+
+> Criando uma noa aula no CMS
+
+> Formatando a Data
+
+usamos o format do date-fns
+
+Lesson.tsx
+documentação do date-fns
+https://date-fns.org/v1.29.0/docs/format
+
+```tsx
+const availableDateFormat = format(
+  props.availableAt,
+  "EEEE' • 'd' de 'MMMM' • 'k'h'mm"
+);
+```
+
+> Agora com a data formatada passamos de ENG para PT-BR
+
+```tsx
+import ptBR from "date-fns/locale/pt-BR";
+const availableDateFormat = format(
+  props.availableAt,
+  "EEEE' • 'd' de 'MMMM' • 'k'h'mm",
+  {
+    locale: ptBR,
+  }
+);
+```
