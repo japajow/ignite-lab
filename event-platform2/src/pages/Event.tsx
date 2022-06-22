@@ -1,11 +1,15 @@
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
+import { Video } from "../components/Video";
 
 export function Event() {
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <Header />
-      <Sidebar />
+      <main>
+        <Video />
+        <Sidebar />
+      </main>
     </div>
   );
 }
