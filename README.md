@@ -1036,3 +1036,32 @@ export function Video() {
   );
 }
 ```
+
+## Colocando a biblioteca player
+
+vimejs
+
+Site : https://vimejs.com
+
+> instalamos os pacotes
+> npm i @vime/core @vime/react --force
+
+> Adicionamos o player na div
+
+```tsx
+//importando a biblioteca
+import { Player } from "@vime/react";
+<div className="h-full w-full max-w-[1100px] mx-h-[60vh] aspect-video">
+  {/* Player */}
+  <Player>
+    <Youtube videoId="SO4-izct7Mc" />
+    <DefaultUi />
+  </Player>
+</div>;
+```
+
+> importamos o tema para p player
+
+```tsx
+import "@vime/core/themes/default.css";
+```
