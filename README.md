@@ -218,3 +218,5 @@ function App() {
 
 export default App;
 ```
+
+## Criando componentes 
