@@ -1065,3 +1065,93 @@ import { Player } from "@vime/react";
 ```tsx
 import "@vime/core/themes/default.css";
 ```
+
+## Instalando rotas no nosso projeto
+
+importamos o react-router-dom
+npm i react-router-dom
+criamos componente chamado Router.tsx
+
+```tsx
+import { Routes, Route } from "react-router-dom";
+
+export function Router() {
+  return (
+    <Routes>
+      <Route path="/" element={<h1>Home</h1>} />
+      <Route path="/event" element={<h1>Event</h1>} />
+    </Routes>
+  );
+}
+```
+
+Colocamos o Router no App.tsx
+
+```tsx
+import { Router } from "./components/Router";
+import { Event } from "./pages/Event";
+
+function App() {
+  return <Router />;
+}
+
+export default App;
+```
+
+Agora que estamos usando o react-router-dom precisamos tambem utilizado englobado
+
+modificamos um pouco o main.tsx e o App.tsx
+
+ficando assim
+
+App.tsx
+
+```tsx
+import { ApolloProvider } from "@apollo/client";
+import { Router } from "./components/Router";
+import { client } from "./lib/apollo";
+function App() {
+  return (
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </ApolloProvider>
+  );
+}
+
+export default App;
+```
+
+main.tsx
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+import "./styles/global.css";
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+agora que finalizamos as rotas vamos colocar o Event.tsx na rota
+
+Router.tsx
+
+```tsx
+import { Routes, Route } from "react-router-dom";
+import { Event } from "../pages/Event";
+
+export function Router() {
+  return (
+    <Routes>
+      <Route path="/" element={<h1>Home</h1>} />
+      <Route path="/event" element={<Event />} />
+    </Routes>
+  );
+}
+```
