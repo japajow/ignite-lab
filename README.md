@@ -343,3 +343,108 @@ export function Header() {
 ```
 
 ## Colocando Css e estruturando
+
+No Header.tsx
+
+```tsx
+import { Logo } from "./Logo";
+
+export function Header() {
+  return (
+    <header className="w-full py-5">
+      <Logo />
+    </header>
+  );
+}
+```
+
+> Colocando as cores e fonte do nosso projeto no tailwind.config.ts
+> Incluindo as cores
+
+```js
+colors: {
+green: {
+300: '#00B37E',
+500: '#00875F',
+700: '#015F43',
+},
+blue: {
+500: '#81D8F7',
+},
+orange: {
+500: '#FBA94C',
+},
+red: {
+500: '#F75A68',
+},
+gray: {
+100: '#E1E1E6',
+200: '#C4C4CC',
+300: '#8D8D99',
+500: '#323238',
+600: '#29292E',
+700: '#121214',
+900: '#09090A'
+}
+},
+```
+
+Includindo a fonte Roboto
+
+```jsx
+  fontFamily: {
+        sans: "Roboto, sans-serif",
+      },
+```
+
+> No global.css mudamos a cor de fundo globalmente
+
+```css
+body {
+  @apply bg-gray-900 text-gray-100;
+}
+```
+
+> Incluindo Css no Event.tsx
+
+```tsx
+import { Header } from "../components/Header";
+import { Sidebar } from "../components/Sidebar";
+import { Video } from "../components/Video";
+
+export function Event() {
+  return (
+    <div className="flex justify-center items-center">
+      <Header />
+      <main>
+        <Video />
+        <Sidebar />
+      </main>
+    </div>
+  );
+}
+```
+
+> Dentro do Video.tsx colocamos o css
+
+```tsx
+export function Video() {
+  return (
+    <div className="flex-1">
+      <Video />
+    </div>
+  );
+}
+```
+
+> No Sidebar.tsx colocamos o Css e as tags
+
+```tsx
+export function Sidebar() {
+  return (
+    <aside className="w-[348px] bg-gray-700 p-6 border-l border-gray-600"></aside>
+  );
+}
+```
+
+No Event.tsx colocamos um hackizinho para que o side bar pegue toda a tela
