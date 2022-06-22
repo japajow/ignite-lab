@@ -328,7 +328,7 @@ export function Logo() {
 }
 ```
 
-Apos transformalo o SVG em JSX criamos no src/components/Logo.tsx
+Apos transformando o SVG em JSX criamos no src/components/Logo.tsx
 
 Logo.tsx e colamos o JSX acima nele
 
@@ -448,3 +448,186 @@ export function Sidebar() {
 ```
 
 No Event.tsx colocamos um hackizinho para que o side bar pegue toda a tela
+
+```tsx
+export function Event() {
+  return (
+    // colocamos flex flex-col e min-h-screen para ocupar toda a tela
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      // colocamos flex-1
+      <main className="flex flex-1">
+        <Video />
+        <Sidebar />
+      </main>
+    </div>
+  );
+}
+```
+
+> Incluindo o titulo no sidebar
+
+```tsx
+<span className="text-2xl font-bold pb-6 mb-6 border-b border-gray-500 block">
+  Cronograma das aulas
+</span>
+```
+
+Ficaria por momento assim a Sidebar.tsx
+
+```tsx
+export function Sidebar() {
+  return (
+    <aside className="w-[348px] bg-gray-700 p-6 border-l border-gray-600">
+      <span className="text-2xl font-bold pb-6 mb-6 border-b border-gray-500 block">
+        Cronograma das aulas
+      </span>
+    </aside>
+  );
+}
+```
+
+> Formatando webkit o texto global
+
+global.css
+
+```css
+body {
+  @apply bg-gray-900 text-gray-100;
+  -webkit-font-smoothing: antialiased;
+}
+```
+
+## Continuando a implementar a estrutura do Sidebar.tsx no component Lesson.tsx
+
+```tsx
+<div className="flex flex-col gap-8">
+  <Lesson />
+  <Lesson />
+  <Lesson />
+  <Lesson />
+  <Lesson />
+  <Lesson />
+</div>
+```
+
+Sidebar.tsx ficaria assim
+
+```tsx
+import { Lesson } from "./Lesson";
+
+export function Sidebar() {
+  return (
+    <aside className="w-[348px] bg-gray-700 p-6 border-l border-gray-600">
+      <span className="text-2xl font-bold pb-6 mb-6 border-b border-gray-500 block">
+        Cronograma das aulas
+      </span>
+
+      <div className="flex flex-col gap-8">
+        <Lesson />
+        <Lesson />
+        <Lesson />
+        <Lesson />
+        <Lesson />
+        <Lesson />
+      </div>
+    </aside>
+  );
+}
+```
+
+> Incluindo a estrutura do Lesson.tsx
+
+```tsx
+export function Lesson() {
+  return (
+    <a href="#">
+      <span>Domingo • 20 de junho • 19h00</span>
+
+      <div>
+        <header>
+          <span>Conteúdo liberado</span>
+          <span>AO VIVO</span>
+        </header>
+
+        <strong>Abertura do evento Ignite labs</strong>
+      </div>
+    </a>
+  );
+}
+```
+
+> Estilizando o Lesson.tsx
+
+```tsx
+export function Lesson() {
+  return (
+    <a href="#">
+      <span className="text-gray-300">Domingo • 20 de junho • 19h00</span>
+
+      <div className="rounded border border-gray-500 p-4 mt-2 ">
+        <header className="flex items-center justify-between">
+          <span className="text-sm text-blue-500 font-medium">
+            Conteúdo liberado
+          </span>
+          <span className="text-xs rounded px-2 py-[0.125rem] text-white border border-green-300 font-bold">
+            AO VIVO
+          </span>
+        </header>
+
+        <strong className="text-gray-200 mt-5 block">
+          Abertura do evento Ignite labs
+        </strong>
+      </div>
+    </a>
+  );
+}
+```
+
+> Incluindo o Ícones no nosso projeto
+
+SIte : https://phosphoricons.com/
+
+npm i phosphor-react
+
+Lesson.tsx
+
+```tsx
+import { CheckCircle } from "phosphor-react";
+
+// Incluímos o ícone
+<span className="text-sm text-blue-500 font-medium flex items-center gap-2">
+  <CheckCircle size={20} />
+  Conteúdo liberado
+</span>;
+```
+
+> Ficaria assim completo
+
+```tsx
+import { CheckCircle } from "phosphor-react";
+
+export function Lesson() {
+  return (
+    <a href="#">
+      <span className="text-gray-300">Domingo • 20 de junho • 19h00</span>
+
+      <div className="rounded border border-gray-500 p-4 mt-2 ">
+        <header className="flex items-center justify-between">
+          <span className="text-sm text-blue-500 font-medium flex items-center gap-2">
+            <CheckCircle size={20} />
+            Conteúdo liberado
+          </span>
+          <span className="text-xs rounded px-2 py-[0.125rem] text-white border border-green-300 font-bold">
+            AO VIVO
+          </span>
+        </header>
+
+        <strong className="text-gray-200 mt-5 block">
+          Abertura do evento Ignite labs
+        </strong>
+      </div>
+    </a>
+  );
+}
+```
