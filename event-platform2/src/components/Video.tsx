@@ -46,12 +46,13 @@ export function Video(props: VideoProps) {
     variables: {
       slug: props.lessonSlug,
     },
+    fetchPolicy: "no-cache",
   });
 
   if (!data) {
     return (
-      <div className="flex-1">
-        <p>Carregando...</p>;
+      <div className=" flex justify-center items-center flex-1  text-4xl italic text-green-400">
+        <p>Carregando...</p>
       </div>
     );
   }

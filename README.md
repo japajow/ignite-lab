@@ -1469,3 +1469,23 @@ export function Video(props: VideoProps) {
   );
 }
 ```
+
+## 4 Dia Estruturando a parte Home
+
+Pegando a imagem da home no figma
+
+Criando uma nova pagina pages/Subscribe.tsx
+
+```tsx
+export function Subscribe() {
+  return <h1>Subscribe</h1>;
+}
+```
+
+No Router.tsx colocamos o Subscribe criado na rota home
+
+```tsx
+<Route path="/" element={<Subscribe />} />
+```
+
+## Estruturando a pagina Home
