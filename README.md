@@ -1598,3 +1598,44 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 ```
+
+## Codificando o formulário Subscribe
+
+Fazendo a parte de receber os dados que foram digitados nos inputs
+
+1 criamos o estado
+
+```tsx
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+```
+
+2 . pegamos os dados digitados pelo onChange()
+
+```tsx
+ onChange={event => setName(event.target.value) }
+ onChange={event => setEmail(event.target.value)}
+```
+
+3 . passamos o value={} o name e email de cada input
+
+```tsx
+value = { name };
+value = { email };
+```
+
+4 . criamos o funcao handleSubmit para quando clicar no button submit
+passando o FormEvent para isso importamos ele do react
+
+```tsx
+import { useState, FormEvent } from "react";
+function handleSubmit(e: FormEvent) {
+  e.preventDefault();
+}
+```
+
+5 . passamos na tag form o onSubmit passando a funcao criada
+
+```tsx
+onSubmit = { handleSubmit };
+```
