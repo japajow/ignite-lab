@@ -1691,3 +1691,47 @@ function handleSubmit(e: FormEvent) {
 1 . Contente API > Create permission > Subscriber > Read > Draft > Create
 
 Como nao tínhamos criado o estado dele como Draft estava dando erro
+
+## Redirecionando o usuário assim que fizer subscriber
+
+1. criamos a variavel navigate usando useNavigate()
+
+```tsx
+const navigate = useNavigate();
+```
+
+2 . Passamos a funcao handleSubmit virar async
+E passamos a rota navigate("/event")
+
+```tsx
+async function handleSubmit(e: FormEvent) {
+  e.preventDefault();
+  await createSubscriber({
+    variables: {
+      name,
+      email,
+    },
+  });
+
+  navigate("/event");
+}
+```
+
+> Colocando o loading no botão submit
+
+passamos a segunda opção que temos no useMutation()
+
+```tsx
+const [createSubscriber, { loading }] = useMutation(CREATE_SUBSCRIBER_MUTATION);
+```
+
+Agora usamos o loading no button quando for clicado disabled
+tambem mudamos o css quando for disabled
+
+```tsx
+ <button
+    type="submit"
+    disabled={loading}
+    className="mt-4 bg-green-500 uppercase py-4 rounded font-bold text-sm hover:bg-green-700 transition-colors disabled:bg-gray-200 disabled:opacity-50"
+  >
+```
