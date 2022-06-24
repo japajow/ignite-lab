@@ -1639,3 +1639,55 @@ function handleSubmit(e: FormEvent) {
 ```tsx
 onSubmit = { handleSubmit };
 ```
+
+## Passando os dados recuperados para o API graphCMS
+
+criamos a tabela gql
+
+```gql
+const CREATE_SUBSCRIBER_MUTATION = gql`
+  mutation CreateSubscriber($name: String!, $email: String!) {
+    createSubscriber(data: { name: $name, email: $email }) {
+      id
+    }
+  }
+`;
+```
+
+2. Usamos o useMutation para criar um subscriber
+
+```tsx
+const [createSubscriber] = useMutation(CREATE_SUBSCRIBER_MUTATION);
+```
+
+3. passamos a funcao createSubscriber para somente quando der o submit ele funcione
+   passando o name e o email
+
+```tsx
+createSubscriber({
+  variables: {
+    name,
+    email,
+  },
+});
+```
+
+A funcao handleSubmit ficaria assim
+
+```tsx
+function handleSubmit(e: FormEvent) {
+  e.preventDefault();
+  createSubscriber({
+    variables: {
+      name,
+      email,
+    },
+  });
+}
+```
+
+> Dando a permissão de leitura para o Subscriber
+
+1 . Contente API > Create permission > Subscriber > Read > Draft > Create
+
+Como nao tínhamos criado o estado dele como Draft estava dando erro
