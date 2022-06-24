@@ -1816,3 +1816,200 @@ Modificando o Ao vivo tambem
     )}
   >
 ```
+
+## 5 dia Instalando GraphQL Code Generation
+
+Graphql code generator ele ajuda como o typescript nos indicando erros ou nao
+
+Site : https://www.graphql-code-generator.com/docs/guides/react#apollo-and-urql
+
+Instalando pacotes
+
+npm install @graphql-codegen/cli
+
+npm i @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-codegen/typescript-react-apollo -D
+
+Criando um arquivo de configuração do graphql code gen
+codegen.yml
+
+colocamos o seguinte código
+
+```yml
+schema: https://api-sa-east-1.graphcms.com/v2/cl4o87jp717vc01z20w4v30a8/master
+
+documents: "./src/graphql**/*.graphql"
+
+generates:
+  ./graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: fetch
+```
+
+Criamos uma pasta
+
+src/graphql/queries
+src/graphql/mutations
+
+dentro de src/graphql/query
+
+```graphql
+query GetLessons {
+  lessons(orderBy: availableAt_ASC, stage: PUBLISHED) {
+    id
+    slug
+    title
+    lessonType
+    availableAt
+  }
+}
+```
+
+No Sidebar.tsx
+apagamos a query gql
+
+No Video.tsx
+copiamos a query e apagamos ele e criamos um arquivo
+graphql/get-lesson-by-slug-query.graphql
+
+```graphql
+query GetLessonBySlug($slug: String) {
+  lesson(where: { slug: $slug }) {
+    title
+    videoId
+    description
+    teacher {
+      avatarURL
+      bio
+      name
+    }
+  }
+}
+```
+
+Vamos na pagina Subscribe.tsx
+
+copiamos o mutation e apagamos ele
+
+criamos na pasta scr/graphql/mutations/create-subscribe-mutation.graphql
+e colocamos a nossa mutation
+
+```graphql
+mutation CreateSubscriber($name: String!, $email: String!) {
+  createSubscriber(data: { name: $name, email: $email }) {
+    id
+  }
+}
+```
+
+Apagamos todas interfaces criadas para pegar os dados query e mutation
+
+Agora no codegen.yml colocamos algumas configuracao
+
+```yml
+generates:
+  ./scr/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      reactApolloVersion: 3
+      # fetcher: fetch
+      withHooks: true
+      withHOC: false
+      withComponent: false
+```
+
+Ficando completo assim
+
+```yml
+schema: https://api-sa-east-1.graphcms.com/v2/cl4o87jp717vc01z20w4v30a8/master
+
+documents: "./src/graphql**/*.graphql"
+
+generates:
+  ./scr/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      reactApolloVersion: 3
+      # fetcher: fetch
+      withHooks: true
+      withHOC: false
+      withComponent: false
+```
+
+Vamos no package.json e incluir o codegen no scripts
+
+```json
+
+ "codegen" : "graphql-codegen"
+
+```
+
+Agora executamos
+
+npm run codegen
+
+Ele vai criar um arquivo no graphql/generated.ts
+
+e usamos agora as funções auto criadas pelo codegen
+
+No Sidebar.tsx
+
+```tsx
+const { data } = useGetLessonQuery();
+```
+
+No Video.tsx
+
+```tsx
+const { data } = useGetLessonBySlugQuery({
+  variables: {
+    slug: props.lessonSlug,
+  },
+  fetchPolicy: "no-cache",
+});
+```
+
+Mudamos um pouco o if
+
+```tsx
+if (!data || !data.lesson) {
+  return (
+    <div className=" flex justify-center items-center flex-1  text-4xl italic text-green-400">
+      <p>Carregando...</p>
+    </div>
+  );
+}
+```
+
+modificamos a parte do teacher se caso nao houver
+
+```tsx
+{
+  data.lesson.teacher && (
+    <div className="flex items-center gap-4 mt-6 ">
+      <img
+        className="h-16 w-16 rounded-full border-2 border-blue-500"
+        src={data.lesson.teacher.avatarURL}
+        alt=""
+      />
+      <div className="leading-relaxed">
+        <strong className="font-bold text-2xl block">
+          {data.lesson.teacher.name}
+        </strong>
+        <span className="text-gray-200 text-sm block">
+          {data.lesson.teacher.bio}
+        </span>
+      </div>
+    </div>
+  );
+}
+```
