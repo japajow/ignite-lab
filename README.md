@@ -1735,3 +1735,84 @@ tambem mudamos o css quando for disabled
     className="mt-4 bg-green-500 uppercase py-4 rounded font-bold text-sm hover:bg-green-700 transition-colors disabled:bg-gray-200 disabled:opacity-50"
   >
 ```
+
+## Colocando um estado diferente quando a aula e selecionado
+
+1 criamos uma valiavel que pega pela url o parametro dela
+
+```tsx
+const { slug } = useParams<{ slug: string }>();
+```
+
+Agora que temos o parâmetro slug criamos uma variável booleans
+
+Se o slug do parâmetro dor igual ao props.slug
+
+modificamos a css da aula selecionado
+
+```tsx
+const isActiveLesson = slug === props.slug;
+```
+
+no css tailwind interpolamos a css assim
+
+```tsx
+ className={`rounded border border-gray-500 p-4 mt-2 group-hover:border-green-600 ${
+          isActiveLesson ? "bg-green-500" : ""
+        }`}
+```
+
+Temos outra forma de modificar o css usando uma lib chamada classNames
+
+npm i classnames
+
+importamos a classnames
+
+```tsx
+import classNames from "classnames";
+```
+
+Usamos a classNames assim
+
+```css
+className={classNames(
+          "rounded border border-gray-500 p-4 mt-2 group-hover:border-green-600",
+          { "bg-green-500": isActiveLesson }
+        )}
+```
+
+modificando tambem o titulo quando selecionado
+
+```tsx
+<strong
+  className={classNames(" mt-5 block", {
+    "text-amber-500": isActiveLesson,
+    "text-gray-200": !isActiveLesson,
+  })}
+>
+  {props.title}
+</strong>
+```
+
+Modificando a classe do conteúdo liberado
+
+```tsx
+<span className={classNames('text-sm text-blue-500 font-medium flex items-center gap-2', {
+    "text-white": isActiveLesson,
+    "text-blue-500": !isActiveLesson,
+  })}>
+```
+
+Modificando o Ao vivo tambem
+
+```tsx
+ <span
+    className={classNames(
+      "text-xs rounded px-2 py-[0.125rem] text-white border border-green-300 font-bold",
+      {
+        "border-white": isActiveLesson,
+        "border-green-300": !isActiveLesson,
+      }
+    )}
+  >
+```
